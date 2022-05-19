@@ -1,6 +1,6 @@
 import ast
 from datetime import datetime
-from genericpath import isfile
+from genericpath import isdir, isfile
 import json
 import os
 from turtle import position
@@ -40,18 +40,20 @@ def checkAddress(w3, address):
 
 # get last Positions scanned for from positions.txt. If file not exsisting or emply, creating it and writing latest Positions to it. 
 def lastPositions(positions, address):
-    if isfile(f"{address}.txt"):
-        with open(f"{address}.txt", "r") as f:
-            if os.stat(f"{address}.txt").st_size > 0:
+    if not isdir("positions"):
+        os.mkdir("positions")
+    if isfile(f"positions/{address}.txt"):
+        with open(f"positions/{address}.txt", "r") as f:
+            if os.stat(f"positions/{address}.txt").st_size > 0:
                 return ast.literal_eval(f.read())
             else:
-                with open(f"{address}.txt", "w") as f:
+                with open(f"positions/{address}.txt", "w") as f:
                     f.write(str(positions))
                 now =  datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
                 print(f"\n{now} -- {address}.txt was empty, updated with latest Position")
                 return None
     else:
-        with open(f"{address}.txt", "w") as f:
+        with open(f"positions/{address}.txt", "w") as f:
             f.write(str(positions))
         now =  datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
         print(f"\n{now} -- {address}.txt created and updated with latest Position.")
@@ -119,7 +121,7 @@ def comparePositions(lastPos, positions):
     return obj
 
 def updateFile(positions, address):
-    with open(f"{address}.txt", "w") as f:
+    with open(f"positions/{address}.txt", "w") as f:
             f.write(str(positions))
     now =  datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
     print(f"\n{now} -- {address}.txt Updated.")
