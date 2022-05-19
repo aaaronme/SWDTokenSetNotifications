@@ -7,6 +7,7 @@ import urllib
 from pexpect import TIMEOUT
 import requests
 from web3 import Web3
+from emojis import getEmoji
 from polygonGET import checkAddress, comparePositions, getName, getPositions, getSymbol, initConnection, lastPositions, updateFile
 from dotenv import load_dotenv
 load_dotenv()
@@ -36,13 +37,14 @@ PIPE = os.getenv("PIPE")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 DISCORD_WEBHOOK_URL= os.getenv("DISCORD_WEBHOOK_URL")
-TIMEOUT = os.getenv("TIMEOUT")
+TIMEOUT = int(os.getenv("TIMEOUT"))
 
 def prepareMessage(w3, obj, address):
     title = getName(w3,address).replace("INDEX", "Index")
     telegram = f"<b>⚠️{title} Rebalance Alert⚠️</b>\n\n"
     sSymbol = getSymbol(w3, address)
-    discord = f"**:SWD{sSymbol}: {title} Rebalance Alert :SWD{sSymbol}:**\n\n"
+    emoji = getEmoji(sSymbol)
+    discord = f"{emoji} **{title} Rebalance Alert** {emoji}\n\n"
     for i in obj:
         if len(obj[i]) != 0:
             for x in range(len(i)):
