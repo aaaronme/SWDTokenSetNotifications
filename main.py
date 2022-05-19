@@ -1,4 +1,5 @@
 from datetime import datetime
+import os
 import sys
 import time
 from discord import Webhook, RequestsWebhookAdapter
@@ -31,16 +32,17 @@ ADDRESSES = [
     "0x55a40b33CFf2eb062e7aa76506B7De711F2B2aff"  # Polygon Ecosystem Index
 ] #contract addresS
 
-PIPE = 'https://polygon-rpc.com'
-TELEGRAM_BOT_TOKEN = "5306284990:AAFXLLyIIy7mR8AGfyuP1-MsZImA3AgVHtk"
-TELEGRAM_CHAT_ID = "1132514458"
-DISCORD_WEBHOOK_URL= "https://discord.com/api/webhooks/976457015461302353/0fZXgmfGVtDySuVElbsMudcsJ2kZpF-yFjxd0Prg-RTiMdUpGBkjUDPF0hO0oagmAPlP"
-TIMEOUT = 5
+PIPE = os.getenv("PIPE")
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+DISCORD_WEBHOOK_URL= os.getenv("DISCORD_WEBHOOK_URL")
+TIMEOUT = os.getenv("TIMEOUT")
 
 def prepareMessage(w3, obj, address):
-    telegram = f"<b>⚠️{getName(w3,address)} Rebalance Alert⚠️</b>\n\n"
+    title = getName(w3,address).replace("INDEX", "Index")
+    telegram = f"<b>⚠️{title} Rebalance Alert⚠️</b>\n\n"
     sSymbol = getSymbol(w3, address)
-    discord = f"**:SWD{sSymbol}: {getName(w3,address)} Rebalance Alert :SWD{sSymbol}:**\n\n"
+    discord = f"**:SWD{sSymbol}: {title} Rebalance Alert :SWD{sSymbol}:**\n\n"
     for i in obj:
         if len(obj[i]) != 0:
             for x in range(len(i)):
@@ -64,8 +66,8 @@ def prepareMessage(w3, obj, address):
                     discord += f"{t}${symbol}{t2}"
                 except IndexError:
                     pass
-    telegram += f"👇Buy ${getSymbol(w3, address)} on Polygon👇\n\nhttps://tokensets.com/v2/set/polygon/{address}"
-    discord += f"👇Buy ${getSymbol(w3, address)} on Polygon👇\n\nhttps://tokensets.com/v2/set/polygon/{address}"
+    telegram += f"👇Buy ${getSymbol(w3, address)} on Polygon👇\n\nhttps://tokensets.com/v2/set/polygon/{address.lower()}"
+    discord += f"👇Buy ${getSymbol(w3, address)} on Polygon👇\n\nhttps://tokensets.com/v2/set/polygon/{address.lower()}"
     return telegram, discord
 
 def telegramNotification(message):
