@@ -3,9 +3,10 @@ import os
 import sys
 import time
 from discord import Webhook, RequestsWebhookAdapter
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
 import urllib
 from pexpect import TIMEOUT
-import requests
+import telegram
 from web3 import Web3
 from emojis import getEmoji
 from polygonGET import checkAddress, comparePositions, getName, getPositions, getSymbol, initConnection, lastPositions, updateFile
@@ -68,20 +69,19 @@ def prepareMessage(w3, obj, address):
                     discord += f"{t}${symbol}{t2}"
                 except IndexError:
                     pass
-    telegram += f"👇Buy ${getSymbol(w3, address)} on Polygon👇\n\nhttps://tokensets.com/v2/set/polygon/{address.lower()}"
+    reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(f"👉 Buy ${getSymbol(w3, address)} on Polygon 👈", url=f"https://tokensets.com/v2/set/polygon/{address.lower()}")]])
     discord += f"👇Buy ${getSymbol(w3, address)} on Polygon👇\n\nhttps://tokensets.com/v2/set/polygon/{address.lower()}"
-    return telegram, discord
 
-def telegramNotification(message):
-    res = requests.post(
-    "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&parse_mode=HTML&text=%s" % (
-        TELEGRAM_BOT_TOKEN,
-        TELEGRAM_CHAT_ID,
-        urllib.parse.quote_plus(message),
-    ))
-    now =  datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
-    print(f"\n{now} - Message send to Telegram:")
-    print("\t--",res.reason)
+    return telegram, discord, reply_markup
+
+def telegramNotification(message, reply_markup):
+    bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
+    now = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+    try:
+        bot.sendMessage(chat_id=TELEGRAM_CHAT_ID, text=message, disable_web_page_preview=True, reply_markup=reply_markup, parse_mode=ParseMode.HTML)
+        print(f"\n{now} - Message send to Telegram:")
+    except Exception as inst:
+        print(f"ERROR with Telegram {now}: {inst}")
 
 def discordNotification(message):
     dc = Webhook.from_url(DISCORD_WEBHOOK_URL, adapter=RequestsWebhookAdapter())
@@ -105,9 +105,9 @@ def mainLoop():
             sys.stdout.flush()
             time.sleep(TIMEOUT)
             continue
-        telegramMsg, discordMsg = prepareMessage(w3,obj,address)
+        telegramMsg, discordMsg, reply_markup = prepareMessage(w3,obj,address)
         updateFile(positions, address)
-        telegramNotification(message=telegramMsg)
+        telegramNotification(message=telegramMsg,reply_markup=reply_markup)
         discordNotification(discordMsg)
 
 def main():
