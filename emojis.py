@@ -88,7 +88,7 @@ e = [
     {"id": 974169334559670292, "name": "PEPEMoney"},
     {"id": 974169334949740554, "name": "CHAD"},
     {"id": 976637362220199986, "name": "SWDMTETH"},
-    {"id": 959450239973093447, "name": 'SWDMTBTC'},
+    {"id": 959450239973093447, "name": "SWDMTBTC"},
     {"id": 976637452649381890, "name": "SWDQMB"},
     {"id": 976637510534967347, "name": "SWDQME"},
     {"id": 976637607419215874, "name": "SWDQMM"},
@@ -105,11 +105,12 @@ e = [
     {"id": 976638624961527829, "name": "SWDSMI"},
     {"id": 976639422688804884, "name": "SWDSWBYF"},
     {"id": 976639513700990996, "name": "SWDSWEYF"},
-    {"id": 976639583070588938, "name": "SWDSWMYF"}
+    {"id": 976639583070588938, "name": "SWDSWMYF"},
 ]
 
+
 def getEmoji(symbol):
-    for i in e: 
+    for i in e:
         if i["name"] == f"SWD{symbol}":
             id = i["id"]
             return f"<:SWD{symbol}:{id}>"
