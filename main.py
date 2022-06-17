@@ -24,14 +24,14 @@ from dotenv import load_dotenv
 load_dotenv()
 ADDRESSES = [
     "0x25ad32265c9354c29e145c902ae876f6b69806f2",  # Alpha Portfolio
-    # "0x71b41b3b19aac53ca4063aec2d17fc3caeb38026",  # Macro Trend BTC
-    # "0x72Ca52512b93E8D67309aF0C14C1A225bcbd3548",  # Macro Trend ETH
+    "0x71b41b3b19aac53ca4063aec2d17fc3caeb38026",  # Macro Trend BTC
+    "0x72Ca52512b93E8D67309aF0C14C1A225bcbd3548",  # Macro Trend ETH
     "0xabcc2102065ba01c6df1a5a5a57158f452403b70",  # Quantum Momentum BTC
     "0x9984d846a3dc77aa0488f3758976b149e8475995",  # Quantum Momentum ETH
     "0x20ab4cb8f8da39582bc92da954ab1bb128f4e244",  # Quantum Momentum MATIC
     "0x58f7C5707Ba8E09B5e61ceBe8821f65434372344",  # Buy the Dip BTC
     "0x07A79127182a1c303d11eCDa951310EC1C2E1444",  # Buy the Dip ETH
-    # "0xb87352B4C3EB9daEd09cD4996dFf85c122394912",  # Buy the Dip MATIC
+    "0xb87352B4C3EB9daEd09cD4996dFf85c122394912",  # Buy the Dip MATIC
     # "0xf2aa5ccea80c246a71e97b418173fcc956408d3f",  # Discretionary BTC
     # "0x72b467cacbdbec5918d8eec0371ca33e6fd42421",  # Discretionary ETH
     # "0xab80a6e2909c8089ebd84f331c05bbefa3276cd2",  # Discretionary MATIC
